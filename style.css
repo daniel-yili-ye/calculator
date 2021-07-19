@@ -1,15 +1,36 @@
-#frame {
+body {
     display: flex;
+    justify-content: center;
+}
+
+#frame {
+    background-color: lightblue;
+    width: 500px;
+    height: 600px;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px auto;
 }
 
 #screen {
-
+    width: 500px;
+    height: 100px;
+    background-color: darkblue;
 }
 
 #button-container {
-
+    width: 500px;
+    height: 500px;
+    background-color: green;
 }
 
 .button {
+    width: 25px;
+    height: 25px;
+    background-color: orange;
     
+}
+
+#screen, #button-container, .button {    
+    border-radius: 5px;
 }
