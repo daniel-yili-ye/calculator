@@ -16,12 +16,11 @@ body {
     width: 500px;
     height: 100px;
     background-color: darkblue;
+    color: white;
 }
 
-#button-container {
-    width: 500px;
-    height: 500px;
-    background-color: green;
+#screen[type="text"] {
+    font-size:60px;
 }
 
 .button {
