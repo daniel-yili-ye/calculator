@@ -8,7 +8,7 @@ btns.forEach(btn => btn.addEventListener("click", e => {
     if (!isNaN(e.toElement.innerHTML)) {
         text.value += e.toElement.innerHTML
     }
-    else if (e.toElement.innerHTML == "=") {
+    else if (/[+-*/=]/.test(e.toElement.innerHTML)) {
         evaluate(eq)
     }
     else {
@@ -25,5 +25,5 @@ ce.addEventListener("click", e => {
 })
 
 function evaluate(y) {
-    console.log(y)
+    math.evaluate(y)
 }
