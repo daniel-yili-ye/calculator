@@ -27,19 +27,28 @@ btns.forEach(btn => btn.addEventListener("click", e => {
         eq = text.value + e.toElement.innerHTML
         overwrite = true
     }
-    else if (e.toElement.innerHTML == "." && !eq.includes(".")) { // first decimal place
+    else if (e.toElement.innerHTML == "." && !eq.includes(".")) { // we need to give this overwrite conditions like in first if
         text.value += e.toElement.innerHTML
         eq += e.toElement.innerHTML
+        overwrite = false
     }
+    console.log(overwrite)
 }))
 
 del.addEventListener("click", () => {
     text.value = text.value.substr(0, text.value.length - 1)
-    eq = eq.substr(0, eq.length - 1)
+    if (rx.test(eq.charAt(eq.length - 1))) {
+        eq = eq.substr(0, eq.length - 2)
+    }
+    else {
+        eq = eq.substr(0, eq.length - 1)
+    }
 })
 
 ce.addEventListener("click", () => {
-    text.value, eq = ""
+    text.value = ""
+    eq = ""
+    overwrite = false
 })
 
 function evaluate(y) {
@@ -50,3 +59,7 @@ function evaluate(y) {
         return "Syntax Error"
     }
 }
+
+// when someone presses a number, operator, then hits DEL => eq is still the number
+// eq is not overwritten when it is Syntax Error or Infinity
+// make it so that i can start off with . and it will show properly
