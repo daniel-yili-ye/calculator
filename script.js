@@ -22,8 +22,13 @@ btns.forEach(btn => btn.addEventListener("click", e => {
         } 
     }
     else if (rx.test(e.target.innerHTML)) { // captures all signs in rx group
-        text.value = evaluate(eq)
-        eq = (e.target.innerHTML == "=") ? (text.value) : (text.value + e.target.innerHTML)
+        if (rx.test(lastClick)) {
+            eq = eq.substr(0, eq.length-1) + e.target.innerHTML
+        }
+        else {
+            text.value = evaluate(eq)
+            eq = (e.target.innerHTML == "=") ? (text.value) : (text.value + e.target.innerHTML)
+        }
     }
     lastClick = e.target.innerHTML
 }))
@@ -62,7 +67,7 @@ document.addEventListener("keydown", e => {
     else if (e.key == "Clear") {
         document.evaluate(`//button[text()="CE"]`, document, null, XPathResult.ANY_TYPE, null).iterateNext().click();
     }
-    else if (e.key == "Backspace") {
+    else if (e.key == "Backspace" || e.key == "Delete") {
         document.evaluate(`//button[text()="DEL"]`, document, null, XPathResult.ANY_TYPE, null).iterateNext().click();
     }
 })
