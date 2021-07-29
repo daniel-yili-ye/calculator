@@ -5,9 +5,10 @@ const ce = document.querySelector("button[id='CE']")
 let eq = ""
 let lastClick = ""
 const rx = /[\+\-\*\/=]/
+const rn = /[0-9\.]/
 
 btns.forEach(btn => btn.addEventListener("click", e => {
-    if ((!isNaN(e.target.innerHTML)) || (e.target.innerHTML == "." && !eq.includes("."))) { // captures all numbers and period
+    if (rn.test(e.target.innerHTML)) { // captures all numbers and period
         if (rx.test(lastClick)) { // when last click was an operator including =, overwrite
             text.value = e.target.innerHTML
             // if last one was "=", you want to replace the eq entirely with new value
@@ -15,10 +16,10 @@ btns.forEach(btn => btn.addEventListener("click", e => {
             eq = (lastClick == "=") ? (e.target.innerHTML) : (eq + e.target.innerHTML)
         }
         else { // append
+            if (e.target.innerHTML == "." && eq.includes(".")) return
             text.value += e.target.innerHTML
             eq += e.target.innerHTML
         } 
-        // number or decimal point is added onto equation
     }
     else if (rx.test(e.target.innerHTML)) { // captures all signs in rx group
         text.value = evaluate(eq)
@@ -51,6 +52,17 @@ function evaluate(y) {
     }
 }
 
-// when someone presses a number, operator, then hits DEL => eq is still the number
-// eq is not overwritten when it is Syntax Error or Infinity
-// make it so that i can start off with . and it will show properly
+document.addEventListener("keydown", e => {
+    if (rx.test(e.key) || rn.test(e.key)) {
+        document.evaluate(`//button[text()="${e.key}"]`, document, null, XPathResult.ANY_TYPE, null).iterateNext().click();
+    }
+    else if (e.key == "Enter") {
+        document.evaluate(`//button[text()="="]`, document, null, XPathResult.ANY_TYPE, null).iterateNext().click();
+    }
+    else if (e.key == "Clear") {
+        document.evaluate(`//button[text()="CE"]`, document, null, XPathResult.ANY_TYPE, null).iterateNext().click();
+    }
+    else if (e.key == "Backspace") {
+        document.evaluate(`//button[text()="DEL"]`, document, null, XPathResult.ANY_TYPE, null).iterateNext().click();
+    }
+})
