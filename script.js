@@ -3,31 +3,28 @@ const text = document.querySelector("input")
 const del = document.querySelector("button[id='DEL']")
 const ce = document.querySelector("button[id='CE']")
 let eq = ""
-let overwrite = false
-const rx = /[\+\-\*\/]/
+let lastClick = ""
+const rx = /[\+\-\*\/=]/
 
 btns.forEach(btn => btn.addEventListener("click", e => {
-    if ((!isNaN(e.toElement.innerHTML)) || (e.toElement.innerHTML == "." && !eq.includes("."))) { // if its a valid number
-        if (overwrite) { // overwrite -> need to make another overwrite condition where you overwrite text.value and eq (essentially hitting CE button)
-            text.value = e.toElement.innerHTML
-            overwrite = false
+    if ((!isNaN(e.target.innerHTML)) || (e.target.innerHTML == "." && !eq.includes("."))) { // captures all numbers and period
+        if (rx.test(lastClick)) { // when last click was an operator including =, overwrite
+            text.value = e.target.innerHTML
+            // if last one was "=", you want to replace the eq entirely with new value
+            // otherwise, you want to append
+            eq = (lastClick == "=") ? (e.target.innerHTML) : (eq + e.target.innerHTML)
         }
         else { // append
-            text.value += e.toElement.innerHTML
+            text.value += e.target.innerHTML
+            eq += e.target.innerHTML
         } 
-        eq += e.toElement.innerHTML // number or decimal point is added onto equation
+        // number or decimal point is added onto equation
     }
-    else if (e.toElement.innerHTML == "=") { // exception for = sign
+    else if (rx.test(e.target.innerHTML)) { // captures all signs in rx group
         text.value = evaluate(eq)
-        eq = text.value
-        overwrite = true
+        eq = (e.target.innerHTML == "=") ? (text.value) : (text.value + e.target.innerHTML)
     }
-    else if (rx.test(e.toElement.innerHTML)) { // if there is 1 signs
-        text.value = evaluate(eq)
-        eq = text.value + e.toElement.innerHTML
-        overwrite = true
-    }
-    console.log(overwrite)
+    lastClick = e.target.innerHTML
 }))
 
 del.addEventListener("click", () => {
@@ -43,7 +40,6 @@ del.addEventListener("click", () => {
 ce.addEventListener("click", () => {
     text.value = ""
     eq = ""
-    overwrite = false
 })
 
 function evaluate(y) {
