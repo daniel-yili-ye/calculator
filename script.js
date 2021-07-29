@@ -22,13 +22,8 @@ btns.forEach(btn => btn.addEventListener("click", e => {
         } 
     }
     else if (rx.test(e.target.innerHTML)) { // captures all signs in rx group
-        if (rx.test(lastClick)) {
-            eq = eq.substr(0, eq.length-1) + e.target.innerHTML
-        }
-        else {
-            text.value = evaluate(eq)
-            eq = (e.target.innerHTML == "=") ? (text.value) : (text.value + e.target.innerHTML)
-        }
+        text.value = evaluate(eq)
+        eq = (e.target.innerHTML == "=") ? (text.value) : (text.value + e.target.innerHTML)
     }
     lastClick = e.target.innerHTML
 }))
@@ -50,7 +45,7 @@ ce.addEventListener("click", () => {
 
 function evaluate(y) {
     try {
-        return (math.evaluate(y)).toString()
+        return (Math.round(parseFloat(math.evaluate(y)) * 100000000000) / 100000000000)
     }
     catch(err) {
         return "Syntax Error"
@@ -71,3 +66,5 @@ document.addEventListener("keydown", e => {
         document.evaluate(`//button[text()="DEL"]`, document, null, XPathResult.ANY_TYPE, null).iterateNext().click();
     }
 })
+
+// give calculator fixed length
