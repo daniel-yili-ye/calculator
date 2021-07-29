@@ -7,7 +7,7 @@ let overwrite = false
 const rx = /[\+\-\*\/]/
 
 btns.forEach(btn => btn.addEventListener("click", e => {
-    if (!isNaN(e.toElement.innerHTML)) { // if its a valid number
+    if ((!isNaN(e.toElement.innerHTML)) || (e.toElement.innerHTML == "." && !eq.includes("."))) { // if its a valid number
         if (overwrite) { // overwrite -> need to make another overwrite condition where you overwrite text.value and eq (essentially hitting CE button)
             text.value = e.toElement.innerHTML
             overwrite = false
@@ -26,11 +26,6 @@ btns.forEach(btn => btn.addEventListener("click", e => {
         text.value = evaluate(eq)
         eq = text.value + e.toElement.innerHTML
         overwrite = true
-    }
-    else if (e.toElement.innerHTML == "." && !eq.includes(".")) { // we need to give this overwrite conditions like in first if
-        text.value += e.toElement.innerHTML
-        eq += e.toElement.innerHTML
-        overwrite = false
     }
     console.log(overwrite)
 }))
